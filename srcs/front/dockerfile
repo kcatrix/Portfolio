@@ -1,0 +1,16 @@
+# Étape 1 : Utiliser l'image de Node.js pour la construction de l'application (stade de développement)
+FROM node:latest as development
+
+WORKDIR /app
+
+# Copy only the package.json and package-lock.json files first
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Now copy the rest of the application files
+COPY . .
+
+# Exécutez la commande pour lancer le serveur de développement (avec l'option "--port 8080" pour l'exposer sur le port 8080)
+CMD ["npm", "run", "serve", "--", "--port", "8080"]

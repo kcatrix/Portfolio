@@ -1,0 +1,60 @@
+version: "3.9"
+    
+services:
+  node:
+    container_name: node
+    build: ./srcs/back
+    image: node
+    # depends_on:
+    #   - postgresql
+    ports:
+      - 3000:3000
+    networks:
+      - porto
+    restart: unless-stopped
+
+  # vue:
+  #   container_name: vue
+  #   build: ./srcs/front/
+  #   image: vue
+  #   # depends_on:
+  #   #   - postgresql
+  #   #   - nestjs
+  #   volumes:
+  #     - ./srcs/front/:/app
+  #     - ./front/node_modules
+  #   ports:
+  #     - 80:80
+  #   networks:
+  #     - porto
+  #   restart: unless-stopped
+
+  vue-dev:
+    build: ./srcs/front/
+    ports:
+      - "8080:8080"  # Port de votre application Vue.js en mode développement
+    volumes:
+      - ./srcs/front:/app  # Montez le répertoire de votre application dans le conteneur
+      - /app/node_modules  # Montez le répertoire node_modules dans le conteneur
+    networks:
+      - porto
+    command: npm run serve -- --port 8080
+
+
+  # postgresql:
+  #   container_name: postgresql
+  #   image: postgres
+  #   networks:
+  #     - porto
+  #   environment:
+  #     POSTGRES_PASSWORD: toto
+  #     POSTGRES_USER: toto
+  #     POSTGRES_DB: porto
+  #   ports:
+  #     - 5432:5432
+  #   restart: unless-stopped
+
+networks:
+  porto:
+    name: porto
+    driver: bridge
